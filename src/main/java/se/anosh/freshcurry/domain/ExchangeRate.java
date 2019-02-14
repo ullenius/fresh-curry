@@ -27,25 +27,14 @@ public class ExchangeRate {
         return base;
     }
 
-    public void setBase(String base) {
-        this.base = base;
-    }
-
     public String getDate() {
         return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public Map<String, BigDecimal> getRates() {
         return Collections.unmodifiableMap(rates);
     }
 
-    public void setRates(Map<String, BigDecimal> rates) {
-        this.rates = rates;
-    }
     @Override
     public String toString() {
         return "Currency{" + "base=" + base + ", date=" + date + ", rates=" + rates + '}';
