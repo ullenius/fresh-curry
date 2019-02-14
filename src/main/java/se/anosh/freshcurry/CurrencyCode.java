@@ -8,7 +8,7 @@
  * Enum code by Istvan Devai 2018
  *
  */
-package se.anosh.restcurrencyclient;
+package se.anosh.freshcurry;
 
 import java.util.EnumSet;
 import java.util.HashMap;

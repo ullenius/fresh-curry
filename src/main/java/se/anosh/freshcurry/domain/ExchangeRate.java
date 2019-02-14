@@ -1,4 +1,4 @@
-package se.anosh.restcurrencyclient.domain;
+package se.anosh.freshcurry.domain;
 
 import java.math.BigDecimal;
 import java.util.Collections;

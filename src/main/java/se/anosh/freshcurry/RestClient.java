@@ -11,9 +11,9 @@
   *
   */
 
-package se.anosh.restcurrencyclient;
+package se.anosh.freshcurry;
 
-import se.anosh.restcurrencyclient.domain.ExchangeRate;
+import se.anosh.freshcurry.domain.ExchangeRate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.IOException;
@@ -22,6 +22,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -41,7 +42,7 @@ public class RestClient {
     
     private void run() throws IOException, InterruptedException {
         
-        System.out.println("Rest Curry - REST CuRRencY clienti\nFOREX REST-client\n");
+        System.out.println("Fresh Curry - REST-client for Java 11\nFOREX REST-client\n");
         menu(); // user IO
         
         URI uri = URI.create("https://api.exchangeratesapi.io/latest");
@@ -63,7 +64,6 @@ public class RestClient {
         }
         
         String result = mainResponse.body();
-        //System.out.println(result);
         
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         ExchangeRate valuta = gson.fromJson(result, ExchangeRate.class);
@@ -80,28 +80,27 @@ public class RestClient {
     
     private void menu() {
         
-        Scanner sc = new Scanner(System.in);
-        int input = 1;
-        final int size = CurrencyCode.values().length; // if the enum is modified in the future
-        
-        System.out.println("List of available currencies:");
-        // Prints the list
-        for (CurrencyCode money : CurrencyCode.values()) {
-            System.out.println(money.getCode() +  "\t" + money);
+        try (Scanner sc = new Scanner(System.in)) {
+            int input = 1;
+            final int size = CurrencyCode.values().length; // if the enum is modified in the future
+            System.out.println("List of available currencies:");
+            // Prints the list
+            for (CurrencyCode money : CurrencyCode.values()) {
+                System.out.println(money.getCode() +  "\t" + money);
+            }   do {
+                System.out.print("\nPlease make your selection: ");
+                input = sc.nextInt();
+                
+            } while (input > size || input < 1);
+            /**
+             * The REST-service uses € EUR as default base currency
+             */
+            if (input != 1) {
+                url = url.concat("?base=" + CurrencyCode.get(input));
+            }
+        } catch (InputMismatchException ex) {
+            System.out.println("Invalid input. Using default values");
         }
-        
-        do {
-            System.out.print("\nPlease make your selection: ");
-            input = sc.nextInt();
-            
-        } while (input > size || input < 1);
-        
-        /**
-         * The REST-service uses € EUR as default base currency
-         */
-        if (input != 1)
-            url = url.concat("?base=" + CurrencyCode.get(input));
-        sc.close(); // closes Scanner
     }
     
     
