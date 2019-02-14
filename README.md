@@ -12,7 +12,7 @@ services in 2019. The port was made 2019-02-14
 * Fresh Curry requires Java 11
 * This is a Maven project:
 ** build a jar-file using 'mvn package'
-** build documentation 'mvn javadoc'
+** build documentation 'mvn javadoc:javadoc'
 
 ## Rest API
 https://exchangeratesapi.io/
