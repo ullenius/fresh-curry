@@ -56,7 +56,6 @@
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.8.0</version>
         </dependency>
-
     
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
@@ -65,13 +64,6 @@
             <version>2.8.5</version>
         </dependency>
         
-      
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>8.0</version>
-            <scope>provided</scope>
-        </dependency>
 
     </dependencies>
     
