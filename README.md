@@ -11,8 +11,8 @@ services in 2019. The porting (fork) to Java 11 was made on 2019-02-14
 ## Building
 * Fresh Curry requires Java 11
 * This is a Maven project:
-** build a jar-file using 'mvn package'
-** build documentation 'mvn javadoc:javadoc'
+  * build a jar-file using 'mvn package'
+  * build documentation using: 'mvn javadoc:javadoc'
 
 ## Rest API
 https://exchangeratesapi.io/
