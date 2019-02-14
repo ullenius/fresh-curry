@@ -16,14 +16,14 @@ package se.anosh.restcurrencyclient;
 import se.anosh.restcurrencyclient.domain.ExchangeRate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
 
 /**
  *
@@ -33,37 +33,40 @@ public class RestClient {
     
     private String url = "https://api.exchangeratesapi.io/latest";
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         
         RestClient client = new RestClient();
         client.run();
     }
     
-    private void run() {
+    private void run() throws IOException, InterruptedException {
         
         System.out.println("Rest Curry - REST CuRRencY clienti\nFOREX REST-client\n");
         menu(); // user IO
         
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target(url);
-        Invocation invocation = target.request("application/JSON").buildGet();
-        Response response = invocation.invoke();
+        URI uri = URI.create("https://api.exchangeratesapi.io/latest");
         
-        //   System.out.println(response.getHeaders().toString());
-        //   System.out.println(response.getStatus());
+        HttpClient httpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
         
-        if (response.getStatus() != 200) {
-            System.out.println("Network error! Obtained code : " + response.getStatus());
+        HttpRequest mainRequest = HttpRequest.newBuilder()
+				      .uri(uri).header("Accept", "application/json").GET().build();
+        
+        
+            HttpResponse<String> mainResponse = httpClient.send(mainRequest, HttpResponse.BodyHandlers.ofString());
+            //   System.out.println(response.getHeaders().toString());
+            //   System.out.println(response.getStatus());
+        
+        if (mainResponse.statusCode() != 200) {
+            System.out.println("Network error! Obtained code : " + mainResponse.statusCode());
             System.out.println("Exiting program");
             return; // exits program
         }
         
-        String result = response.readEntity(String.class);
+        String result = mainResponse.body();
         //System.out.println(result);
         
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         ExchangeRate valuta = gson.fromJson(result, ExchangeRate.class);
-        response.close();
         
         System.out.println("Base: " + valuta.getBase());
         System.out.println("Date: " + valuta.getDate());
