@@ -40,7 +40,7 @@ public class RestClient {
         client.run();
     }
     
-    private void run() throws IOException, InterruptedException {
+    private void run() {
         
         System.out.println("Fresh Curry - REST-client for Java 11\nFOREX REST-client\n");
         menu(); // user IO
@@ -52,17 +52,21 @@ public class RestClient {
         HttpRequest mainRequest = HttpRequest.newBuilder()
 				      .uri(uri).header("Accept", "application/json").GET().build();
         
-        
-            HttpResponse<String> mainResponse = httpClient.send(mainRequest, HttpResponse.BodyHandlers.ofString());
-        
+       String result = "";
+       try {
+             HttpResponse<String> mainResponse = httpClient.send(mainRequest, HttpResponse.BodyHandlers.ofString());
+             result = mainResponse.body();
         if (mainResponse.statusCode() != 200) {
             System.out.println("Network error! Obtained code : " + mainResponse.statusCode());
             System.out.println("Exiting program");
             return; // exits program
         }
-        
-        String result = mainResponse.body();
-        
+        } catch (IOException | InterruptedException ex) {
+            System.out.println("Something went terribly wrong. Crash and burn");
+            System.exit(0);
+            
+        }
+       
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         ExchangeRate valuta = gson.fromJson(result, ExchangeRate.class);
         
@@ -98,6 +102,7 @@ public class RestClient {
             }
         } catch (InputMismatchException ex) {
             System.out.println("Invalid input. Using default values");
+            
         }
     }
     
