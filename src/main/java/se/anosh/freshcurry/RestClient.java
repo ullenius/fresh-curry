@@ -54,8 +54,6 @@ public class RestClient {
         
         
             HttpResponse<String> mainResponse = httpClient.send(mainRequest, HttpResponse.BodyHandlers.ofString());
-            //   System.out.println(response.getHeaders().toString());
-            //   System.out.println(response.getStatus());
         
         if (mainResponse.statusCode() != 200) {
             System.out.println("Network error! Obtained code : " + mainResponse.statusCode());
